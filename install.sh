@@ -98,11 +98,8 @@ if [ -f "$CONF" ]; then
   }
   # Keep the game's Vulkan pipeline cache under its 1 GiB limit (LZFSE).
   add_env MVK_CONFIG_SHADER_COMPRESSION_ALGORITHM 1
-  # Metal fast-math; the game's shaders otherwise force "precise" everywhere.
-  add_env MVK_CONFIG_FAST_MATH_ENABLED 1
   # Don't block the render thread on every queue submit.
   add_env MVK_CONFIG_SYNCHRONOUS_QUEUE_SUBMITS 0
-  add_env MVK_CONFIG_USE_MTLHEAP 1
   # Steam's Vulkan layers add overhead to every present; the overlay won't work.
   add_env DISABLE_VK_LAYER_VALVE_steam_overlay_1 1
   add_env DISABLE_VK_LAYER_VALVE_steam_fossilize_1 1
