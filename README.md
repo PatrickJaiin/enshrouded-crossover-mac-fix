@@ -44,11 +44,12 @@ CrossOver uses for Vulkan games):
    ```
    [mvk-error] SPIR-V to MSL conversion error: Maximum compilation loops detected and no forward progress was made. Must be a SPIRV-Cross bug!
    ```
-   SPIRV-Cross fixed this on September 3 2026 (commit `83fa691c`), but MoltenVK pins an
-   older SPIRV-Cross revision, so a stock MoltenVK build still crashes.
+   SPIRV-Cross fixed this on September 1 2026 (commit `bf0e342f`, closing an issue filed against
+   this exact Enshrouded shader), with a follow-up regression fix on September 4 (`83fa691c`).
+   MoltenVK pins an older SPIRV-Cross revision, so a stock MoltenVK build still crashes.
 
-The `libMoltenVK.dylib` in the release is MoltenVK `main` (1.4.3, commit `4aaf714a`)
-built with SPIRV-Cross bumped to `83fa691c`. Source for that exact build:
+The `libMoltenVK.dylib` in the release is MoltenVK `main` (1.4.3, upstream commit `4aaf714a`,
+fork commit `04e31d2d`) built with SPIRV-Cross bumped to `83fa691c`. Source for that exact build:
 <https://github.com/PatrickJaiin/MoltenVK/tree/enshrouded-spirv-cross-bump>
 (one-line change to `ExternalRevisions/SPIRV-Cross_repo_revision`; the binary comes from
 that branch's GitHub Actions run).
@@ -66,9 +67,7 @@ recompiled all shaders during play, forever.
 | Variable | Value | Why |
 |---|---|---|
 | `MVK_CONFIG_SHADER_COMPRESSION_ALGORITHM` | `1` | LZFSE-compress shader source in the pipeline cache so it fits under the game's 1 GiB limit and gets reused |
-| `MVK_CONFIG_FAST_MATH_ENABLED` | `1` | The game's shaders declare float-controls that force "precise" math in Metal; fast math is noticeably cheaper |
 | `MVK_CONFIG_SYNCHRONOUS_QUEUE_SUBMITS` | `0` | Stop blocking the render thread on every queue submit |
-| `MVK_CONFIG_USE_MTLHEAP` | `1` | Cheaper memory allocation |
 | `DISABLE_VK_LAYER_VALVE_steam_overlay_1` | `1` | Steam's overlay Vulkan layer hooks every present. The Shift+Tab overlay will not work in-game |
 | `DISABLE_VK_LAYER_VALVE_steam_fossilize_1` | `1` | Steam's shader-recording layer, pure overhead here |
 
